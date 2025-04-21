@@ -1,34 +1,20 @@
-
 from flask import Flask, request, jsonify
-import openai
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "Rezonanta: Yankı Sistemi Çalışıyor!"
+    return "Rezonanta API çalışıyor."
 
 @app.route("/ask", methods=["POST"])
 def ask():
     data = request.get_json()
     question = data.get("question", "")
-    if not question:
-        return jsonify({"error": "Soru eksik"}), 400
 
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": question}]
-        )
-        answer = response['choices'][0]['message']['content']
-        return jsonify({"answer": answer})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    # Geçici cevap mekanizması
+    response = f"Sorduğun: '{question}'. Bu cevap test için oluşturulmuştur."
+
+    return jsonify({"answer": response})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
